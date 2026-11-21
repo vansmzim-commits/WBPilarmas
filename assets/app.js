@@ -158,7 +158,7 @@ for (const p of $$(".pal")) p.addEventListener("click", () => { p.classList.remo
   });
 })();
 
-/* Musik latar: tidak menyala sendiri, pengunjung yang memilih. Pilihan diingat di semua halaman. */
+/* Musik latar: menyala otomatis, bisa dimatikan lewat tombol. Pilihan diingat di semua halaman. */
 (function () {
   const btn = document.getElementById("musik");
   if (!btn) return;
@@ -216,11 +216,25 @@ for (const p of $$(".pal")) p.addEventListener("click", () => { p.classList.remo
   btn.hidden = false;
   btn.addEventListener("click", () => { if (playing) { stop(); save("off"); } else { play(); save("on"); } });
 
-  // Pengunjung yang sudah menyalakan musik: lanjutkan di halaman berikutnya setelah sentuhan pertama.
-  if (saved() === "on") {
-    const go = (ev) => { if (ev && btn.contains(ev.target)) return; if (!playing) play(); off(); };
-    const off = () => ["pointerdown", "keydown", "touchstart"].forEach((t) => removeEventListener(t, go, true));
-    ["pointerdown", "keydown", "touchstart"].forEach((t) => addEventListener(t, go, { capture: true, passive: true }));
+  // Musik menyala otomatis kecuali pengunjung pernah mematikannya.
+  // Browser melarang suara sebelum ada interaksi, jadi dicoba langsung dulu; bila ditolak, mulai pada sentuhan/klik/tombol pertama.
+  if (saved() !== "off") {
+    const ev = ["pointerdown", "keydown", "touchend", "click"];
+    const off = () => ev.forEach((t) => removeEventListener(t, go, true));
+    const go = (e) => { if (e && btn.contains(e.target)) { off(); return; } off(); if (!playing) play(); };
+    ev.forEach((t) => addEventListener(t, go, { capture: true, passive: true }));
+    (async () => {
+      try {
+        if (AC) {
+          ctx = new AC(); gain = ctx.createGain(); gain.gain.value = 0; gain.connect(ctx.destination);
+          await Promise.race([ctx.resume(), new Promise((r) => setTimeout(r, 300))]);
+          if (ctx.state === "running") { off(); play(); }
+        } else {
+          el = Object.assign(new Audio(src), { loop: true, volume: VOL });
+          await el.play(); off(); playing = true; ui(true);
+        }
+      } catch (e) {}
+    })();
   }
   document.addEventListener("visibilitychange", () => { if (!ctx) return; if (document.hidden) ctx.suspend(); else if (playing) ctx.resume(); });
 })();
