@@ -322,7 +322,7 @@ ol.steps{padding:0;margin:0}
 .sec-char{position:absolute;right:-150px;top:-30px;width:110px}
 .div-logo{height:64px;width:auto;justify-self:start}
 .div-row.feature .div-logo{background:#fff;border-radius:14px;padding:4px 10px;height:72px}
-.ph-mascot.is-char{width:min(20vw,220px)}
+.ph-mascot.is-char{width:min(20vw,220px);filter:none}
 .ph-mascot.is-brand{width:min(24vw,270px);background:#fff;border-radius:24px;padding:14px}
 .pals{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
 .pal{background:var(--card);border:2px solid var(--line);border-radius:var(--r-lg);padding:16px 12px 14px;display:grid;justify-items:center;gap:10px;cursor:pointer;font:600 17px var(--head);color:var(--ink);transition:border-color .2s,transform .2s}

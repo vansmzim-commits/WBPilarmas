@@ -58,7 +58,7 @@ def tetes(cls="", pose="wave", label=None):
 </svg>'''
 
 CHARS = {"bae": "Bae", "bungjin": "Bung Jin", "halaf": "Halaf", "kuya": "Kuya", "monpil": "Monpil & Ubbie", "tanbo": "Tanbo"}
-ANIM = {"bae": (254, 300), "kuya": (180, 300), "tanbo": (250, 260), "monpil": (300, 298), "bungjin": (210, 300), "halaf": (232, 300)}  # karakter animasi (WebP bergerak)
+ANIM = {"bae": (254, 300), "kuya": (180, 300), "tanbo": (250, 260), "monpil": (295, 300), "bungjin": (210, 300), "halaf": (232, 300)}  # karakter animasi (WebP bergerak)
 CSZ = {"bae": (411, 520), "bungjin": (347, 520), "halaf": (390, 520), "kuya": (301, 520), "monpil": (508, 520), "tanbo": (358, 520)}
 def char(key, cls="", alt=True, id_=None):
     w, h = CSZ[key]
@@ -139,7 +139,7 @@ def foot():
 
 def pagehero(crumb, title, lead, cta=None, navy=False, mascot=False):
     c = f'<div class="cta">{cta}</div>' if cta else ""
-    m = f'<img class="ph-mascot{" is-char" if "char-" in mascot else ""}{" is-brand" if mascot in ("logo-hydro.webp", "logo-gh.webp", "logo-hdstar.webp", "logo-globenet.webp") else ""}" src="assets/{mascot}" alt="">' if mascot else ""
+    m = f'<img class="ph-mascot{" is-char" if ("char-" in mascot or "anim-" in mascot) else ""}{" is-brand" if mascot in ("logo-hydro.webp", "logo-gh.webp", "logo-hdstar.webp", "logo-globenet.webp") else ""}" src="assets/{mascot}"{(' data-still="assets/' + mascot.replace("anim-monpil-jump", "char-monpil") + '"') if "anim-" in mascot else ""} alt="">' if mascot else ""
     return f'''<section class="pagehero{' navy' if navy else ''}{' has-mascot' if mascot else ''}" id="isi">
   {m}<div class="wrap">
     <p class="crumb"><a href="index.html">Beranda</a> / {E(crumb)}</p>
@@ -435,7 +435,7 @@ PK = [("hemat", "Hemat", 40000, 50000, "Pesta simpel, boleh bawa kue sendiri", "
 AD = [("Kue ulang tahun 18 cm", 185000, "acara"), ("Kue karakter atau 2 tingkat", 325000, "acara"), ("Nasi box anak", 22000, "anak"), ("Goodie bag", 10000, "anak"), ("Es krim cup", 7500, "anak"), ("Badut atau MC profesional", 425000, "acara"), ("Dekor tema penuh", 350000, "acara"), ("Dokumentasi foto 1 jam", 250000, "acara"), ("Photobooth dan cetak foto", 450000, "acara"), ("Tambahan waktu 1 jam", 150000, "acara")]
 rp = lambda n: "Rp " + f"{n:,}".replace(",", ".")
 b = head("Paket ulang tahun Pilarmas", "Paket ulang tahun anak di kolam renang Pilarmas Sukabumi untuk 20 anak, mulai Rp 40.000 per anak.") + topbar("ulang-tahun.html")
-b += pagehero("Edu Wisata / Paket ulang tahun", "Ulang tahun si kecil di kolam renang", "Tiket renang, dekor, snack, MC, dan games air sudah kami siapkan. Orang tua tinggal datang dan menikmati acaranya.", f'<a class="btn brass" href="#hitung">Hitung biaya pesta</a><a class="btn ghost" data-wa="acara" data-msg="Halo Pilarmas, saya mau cek tanggal kosong untuk ulang tahun anak." href="#kontak">Cek tanggal kosong</a>', navy=True, mascot="char-monpil.webp")
+b += pagehero("Edu Wisata / Paket ulang tahun", "Ulang tahun si kecil di kolam renang", "Tiket renang, dekor, snack, MC, dan games air sudah kami siapkan. Orang tua tinggal datang dan menikmati acaranya.", f'<a class="btn brass" href="#hitung">Hitung biaya pesta</a><a class="btn ghost" data-wa="acara" data-msg="Halo Pilarmas, saya mau cek tanggal kosong untuk ulang tahun anak." href="#kontak">Cek tanggal kosong</a>', navy=True, mascot="anim-monpil-jump.webp")
 b += subnav([("Paket", "paket"), ("Hitung biaya", "hitung"), ("Tema dekor", "tema"), ("Tambahan", "tambahan"), ("Syarat", "syarat"), ("Tanya jawab", "faq")])
 b += f'''<section class="band" id="paket"><div class="wrap">
 <div class="sec-head"><h2>Pilih paket untuk 20 anak</h2><p class="lead">Harga per anak. Anak tambahan dihitung dengan harga yang sama.</p></div>
