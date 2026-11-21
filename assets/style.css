@@ -396,3 +396,16 @@ ol.steps{padding:0;margin:0}
 .k-note img.k-note-char{position:absolute;right:4%;bottom:-4%;height:96%;width:auto;max-width:34%;object-fit:contain;object-position:bottom}
 .k-note>*:not(img){position:relative;z-index:1}
 @media (max-width:980px){.k-note{grid-row:span 3;padding-right:26px;padding-bottom:150px}.k-note img.k-note-char{height:150px;max-width:none;right:12px;bottom:-8px}}
+/* Tombol musik latar */
+.music{position:fixed;left:max(16px,env(safe-area-inset-left));bottom:max(16px,env(safe-area-inset-bottom));z-index:50;display:flex;align-items:center;gap:8px;height:46px;padding:0 16px 0 12px;border:0;border-radius:999px;background:#fff;color:var(--navy);font:600 14px/1 var(--head),system-ui,sans-serif;box-shadow:0 6px 20px rgba(21,40,74,.18),inset 0 0 0 2px #CFE6F4;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.music:hover{transform:translateY(-2px)}
+.music:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.music .note{width:20px;height:20px;color:var(--water)}
+.music .eq{display:none;align-items:flex-end;gap:3px;width:20px;height:18px}
+.music .eq i{display:block;width:4px;border-radius:2px;background:var(--brass);height:40%;animation:eq 1s ease-in-out infinite}
+.music .eq i:nth-child(2){animation-delay:-.35s}.music .eq i:nth-child(3){animation-delay:-.7s}
+.music[aria-pressed=true]{background:var(--navy);color:#fff;box-shadow:0 6px 20px rgba(21,40,74,.28)}
+.music[aria-pressed=true] .note{display:none}.music[aria-pressed=true] .eq{display:flex}
+@keyframes eq{0%,100%{height:30%}50%{height:100%}}
+@media (max-width:560px){.music{height:44px;padding:0 12px}.music .mlbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
+@media (prefers-reduced-motion:reduce){.music .eq i{animation:none;height:70%}}

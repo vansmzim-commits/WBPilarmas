@@ -133,6 +133,7 @@ def foot():
   </div>
 </footer>
 {LIGHTBOX}
+{MUSIC_BTN}
 <script src="assets/app.js?v={VER_JS}"></script>
 </body>
 </html>'''
@@ -248,6 +249,7 @@ def kegiatan(sid, title, lead, items, key, alt=False, extra=""):
             '<div class="sec-head"><h2>%s</h2><p class="lead">%s</p></div>'
             '<div class="k-grid">%s%s</div>%s</div></section>') % (sid, bg, E(title), E(lead), figs, extra, social_row(key))
 
+MUSIC_BTN = '<button class="music" id="musik" type="button" aria-pressed="false" aria-label="Putar musik latar" hidden><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span><svg class="note" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="17" cy="16" r="3" fill="currentColor"/></svg><span class="mlbl">Putar musik</span></button>'
 LIGHTBOX = '<dialog class="lb" id="lb" aria-label="Foto kegiatan"><button class="lb-x" type="button" aria-label="Tutup foto">&times;</button><img alt=""><p></p></dialog>'
 
 

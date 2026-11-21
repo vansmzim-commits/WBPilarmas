@@ -157,3 +157,70 @@ for (const p of $$(".pal")) p.addEventListener("click", () => { p.classList.remo
     if (e.target === lb || e.target.closest(".lb-x")) lb.close();
   });
 })();
+
+/* Musik latar: tidak menyala sendiri, pengunjung yang memilih. Pilihan diingat di semua halaman. */
+(function () {
+  const btn = document.getElementById("musik");
+  if (!btn) return;
+  const page = (location.pathname.split("/").pop() || "index.html").replace(".html", "") || "index";
+  const TRACK = { index: "beranda", "edu-wisata": "beranda", "ulang-tahun": "ultah", "hd-star": "hdstar", "globe-net": "globenet", hydro: "hydro", "global-hospitality": "gh" };
+  const src = "assets/musik-" + (TRACK[page] || "beranda") + ".mp3";
+  const VOL = 0.35, KEY = "pm-musik";
+  const AC = window.AudioContext || window.webkitAudioContext;
+  let ctx, gain, node, buf, loading, playing = false, el;
+  const save = (v) => { try { localStorage.setItem(KEY, v); } catch (e) {} };
+  const saved = () => { try { return localStorage.getItem(KEY); } catch (e) { return null; } };
+  const ui = (on) => { btn.setAttribute("aria-pressed", on ? "true" : "false"); btn.setAttribute("aria-label", on ? "Matikan musik latar" : "Putar musik latar"); btn.querySelector(".mlbl").textContent = on ? "Musik menyala" : "Putar musik"; };
+
+  // Cari batas bunyi agar loop menyambung tanpa jeda (MP3 punya sedikit hening di awal dan akhir).
+  function bounds(b) {
+    const d = b.getChannelData(0), t = 0.002;
+    let s = 0, e = d.length - 1;
+    while (s < d.length && Math.abs(d[s]) < t) s++;
+    while (e > s && Math.abs(d[e]) < t) e--;
+    return [s / b.sampleRate, (e + 1) / b.sampleRate];
+  }
+  async function startWA() {
+    if (!ctx) { ctx = new AC(); gain = ctx.createGain(); gain.gain.value = 0; gain.connect(ctx.destination); }
+    if (ctx.state === "suspended") await ctx.resume();
+    if (!buf) {
+      loading = loading || fetch(src).then((r) => r.arrayBuffer()).then((a) => new Promise((ok, no) => ctx.decodeAudioData(a, ok, no)));
+      buf = await loading;
+    }
+    if (!playing) return;
+    const [ls, le] = bounds(buf);
+    node = ctx.createBufferSource(); node.buffer = buf; node.loop = true; node.loopStart = ls; node.loopEnd = le;
+    node.connect(gain); node.start(0, ls);
+    gain.gain.cancelScheduledValues(ctx.currentTime);
+    gain.gain.setValueAtTime(gain.gain.value, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(VOL, ctx.currentTime + 1.2);
+  }
+  function stopWA() {
+    if (!ctx || !node) return;
+    const n = node; node = null;
+    gain.gain.cancelScheduledValues(ctx.currentTime);
+    gain.gain.setValueAtTime(gain.gain.value, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.4);
+    setTimeout(() => { try { n.stop(); } catch (e) {} }, 450);
+  }
+  async function play() {
+    playing = true; ui(true);
+    try {
+      if (AC) await startWA();
+      else { el = el || Object.assign(new Audio(src), { loop: true, volume: VOL }); await el.play(); }
+      return true;
+    } catch (e) { playing = false; ui(false); return false; }
+  }
+  function stop() { playing = false; ui(false); if (el) el.pause(); stopWA(); }
+
+  btn.hidden = false;
+  btn.addEventListener("click", () => { if (playing) { stop(); save("off"); } else { play(); save("on"); } });
+
+  // Pengunjung yang sudah menyalakan musik: lanjutkan di halaman berikutnya setelah sentuhan pertama.
+  if (saved() === "on") {
+    const go = (ev) => { if (ev && btn.contains(ev.target)) return; if (!playing) play(); off(); };
+    const off = () => ["pointerdown", "keydown", "touchstart"].forEach((t) => removeEventListener(t, go, true));
+    ["pointerdown", "keydown", "touchstart"].forEach((t) => addEventListener(t, go, { capture: true, passive: true }));
+  }
+  document.addEventListener("visibilitychange", () => { if (!ctx) return; if (document.hidden) ctx.suspend(); else if (playing) ctx.resume(); });
+})();
