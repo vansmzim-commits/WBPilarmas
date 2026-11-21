@@ -1,5 +1,9 @@
 {
 /* Nomor WhatsApp tiap divisi. Isi dengan format 62xxxxxxxxxx (tanpa + atau 0 di depan). */
+/* Karakter bergerak: kembali ke gambar diam bila pengunjung memilih kurangi gerakan */
+const ANIM = ["bae", "kuya", "tanbo"];
+const RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (RM) document.querySelectorAll("img[data-still]").forEach((im) => { im.src = im.dataset.still; });
 const WA = { kolam: "6285797810150", les: "6285797810150", acara: "6285797810150", hdstar: "628119782025", globenet: "6281563368849", hydro: "628139522476", gh: "628119112025" };
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -64,7 +68,7 @@ if (chips.length) {
     };
     if (bub && started) {
       const g = $("#guideChar"), k = who[f] || "bae";
-      if (g) { g.src = "assets/char-" + k + ".webp"; g.alt = NAME[k] + ", karakter Pilarmas"; g.classList.remove("hop"); void g.getBoundingClientRect(); g.classList.add("hop"); }
+      if (g) { g.src = (ANIM.includes(k) && !RM ? "assets/anim-" : "assets/char-") + k + ".webp"; g.alt = NAME[k] + ", karakter Pilarmas"; g.classList.remove("hop"); void g.getBoundingClientRect(); g.classList.add("hop"); }
       $("#guideName").textContent = NAME[k];
       bub.textContent = say[f]; const p = bub.parentElement; p.classList.remove("pop"); void p.offsetWidth; p.classList.add("pop");
     }

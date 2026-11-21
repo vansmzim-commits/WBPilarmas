@@ -58,11 +58,15 @@ def tetes(cls="", pose="wave", label=None):
 </svg>'''
 
 CHARS = {"bae": "Bae", "bungjin": "Bung Jin", "halaf": "Halaf", "kuya": "Kuya", "monpil": "Monpil & Ubbie", "tanbo": "Tanbo"}
+ANIM = {"bae": (254, 300), "kuya": (180, 300), "tanbo": (250, 260)}  # karakter animasi (WebP bergerak)
 CSZ = {"bae": (411, 520), "bungjin": (347, 520), "halaf": (390, 520), "kuya": (301, 520), "monpil": (508, 520), "tanbo": (358, 520)}
 def char(key, cls="", alt=True, id_=None):
     w, h = CSZ[key]
     a = f'alt="{E(CHARS[key])}, karakter Pilarmas"' if alt else 'alt=""'
     i = f' id="{id_}"' if id_ else ""
+    if key in ANIM:
+        aw, ah = ANIM[key]
+        return f'<img class="char {cls}"{i} src="assets/anim-{key}.webp" data-still="assets/char-{key}.webp" {a} width="{aw}" height="{ah}" loading="lazy">'
     return f'<img class="char {cls}"{i} src="assets/char-{key}.webp" {a} width="{w}" height="{h}" loading="lazy">'
 
 def head(title, desc):
@@ -278,7 +282,8 @@ def tile(i, t, desc, p, d, h, f):
     if kind == "f":
         pic = f'<img src="assets/foto-{key}.webp" alt="" loading="lazy">'
     elif kind == "c":
-        pic = f'<img class="tchar" src="assets/char-{key}.webp" alt="" loading="lazy">'
+        pic = (f'<img class="tchar" src="assets/anim-{key}.webp" data-still="assets/char-{key}.webp" alt="" loading="lazy">' if key in ANIM
+               else f'<img class="tchar" src="assets/char-{key}.webp" alt="" loading="lazy">')
     else:
         pic = f'<img class="tlogo" src="assets/logo-{key}.webp" alt="" loading="lazy">'
     tag = f'<span class="ttag">{E(TILE_TAG[i])}</span>' if i in TILE_TAG else ""
