@@ -123,6 +123,7 @@ def foot():
     <small>Kolam Renang Pilar Mas, Baros, Kota Sukabumi, Jawa Barat 43161. Senin–Kamis 09.00–17.00, Sabtu–Minggu 08.00–17.00, Jumat libur. <a href="https://www.google.com/maps/search/?api=1&query=Kolam+Renang+Pilar+Mas&query_place_id=ChIJv0X-8mlHaC4R28F2sM2gNaU" style="color:#FFE29A">Buka di Google Maps</a>. Harga paket di situs ini masih draf dan dapat berubah.</small>
   </div>
 </footer>
+{LIGHTBOX}
 <script src="assets/app.js"></script>
 </body>
 </html>'''
@@ -205,6 +206,41 @@ SCENE = '''<svg class="scene" viewBox="0 0 640 440" role="img" aria-label="Ilust
 </g>
 <rect x="56" y="300" width="14" height="38" rx="3" fill="#C7D3DC"/><rect x="82" y="300" width="14" height="38" rx="3" fill="#C7D3DC"/><path d="M63 300v-14a13 13 0 0 1 26 0v14" stroke="#C7D3DC" stroke-width="6" fill="none"/>
 </svg>'''
+
+
+# ---------- Galeri kegiatan & media sosial per divisi ----------
+SOCIAL = {
+ "kolam": [("instagram", "Instagram", "@kolam_pilarmas", "https://www.instagram.com/kolam_pilarmas/"),
+           ("facebook", "Facebook", "Wisata Kolam Renang Pilar Mas", "https://www.facebook.com/KolamPilarMas/")],
+ "hdstar": [], "globenet": [], "hydro": [], "gh": [],
+}
+SICON = {
+ "instagram": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>',
+ "facebook": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8.5a.5.5 0 0 1 .5-.5z"/></svg>',
+ "tiktok": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.5 2.8 2.4 4.5 5 4.7"/></svg>',
+ "youtube": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.5v5l4.5-2.5z" fill="currentColor"/></svg>',
+}
+
+def social_row(key, label="Ikuti kegiatan terbaru kami"):
+    acc = SOCIAL.get(key) or []
+    if not acc:
+        return ""
+    btn = "".join('<a class="soc soc-%s" href="%s" target="_blank" rel="noopener">%s<span><b>%s</b><small>%s</small></span></a>' % (k, E(u), SICON[k], E(n), E(h)) for k, n, h, u in acc)
+    return '<div class="socials"><p>%s</p><div class="soc-list">%s</div></div>' % (E(label), btn)
+
+def kegiatan(sid, title, lead, items, key, alt=False, extra=""):
+    figs = ""
+    for img, cap, when, alt_, c in items:
+        w = "<span>%s</span>" % E(when) if when else ""
+        figs += ('<figure class="k-%s"><button type="button" data-lb="assets/%s.webp" data-cap="%s" aria-label="Perbesar foto: %s">'
+                 '<img src="assets/%s.webp" alt="%s" loading="lazy"></button><figcaption><b>%s</b>%s</figcaption></figure>') % (c, img, E(cap), E(cap), img, E(alt_), E(cap), w)
+    bg = ' style="background:var(--water-3)"' if alt else ""
+    return ('<section class="band kegiatan" id="%s"%s><div class="wrap">'
+            '<div class="sec-head"><h2>%s</h2><p class="lead">%s</p></div>'
+            '<div class="k-grid">%s%s</div>%s</div></section>') % (sid, bg, E(title), E(lead), figs, extra, social_row(key))
+
+LIGHTBOX = '<dialog class="lb" id="lb" aria-label="Foto kegiatan"><button class="lb-x" type="button" aria-label="Tutup foto">&times;</button><img alt=""><p></p></dialog>'
+
 
 # ======================= BERANDA =======================
 TILES = [
@@ -305,7 +341,7 @@ write("index.html", b)
 # ======================= EDU WISATA =======================
 b = head("Edu Wisata Kolam Renang", "Tiket, les renang, paket ulang tahun, arisan, gathering, dan program sekolah di Edu Wisata Kolam Renang Pilarmas, Sukabumi.") + topbar("edu-wisata.html")
 b += pagehero("Edu Wisata Kolam Renang", "Edu Wisata Kolam Renang Pilarmas", "Datang untuk berenang bersama keluarga, ikut les renang, atau pesan tempat untuk ulang tahun, arisan, gathering, dan kunjungan sekolah.", f'<a class="btn brass" data-wa="kolam" href="#kontak">{I["wa"]}Tanya admin kolam</a>', mascot="logo-pilarmas.webp")
-b += subnav([("Tiket", "tiket"), ("Fasilitas", "fasilitas"), ("Les renang", "les"), ("Ulang tahun", "ultah"), ("Arisan & keluarga", "arisan"), ("Komunitas & kantor", "komunitas"), ("Sekolah", "sekolah"), ("Musiman", "musiman"), ("Tanya jawab", "faq")])
+b += subnav([("Tiket", "tiket"), ("Fasilitas", "fasilitas"), ("Les renang", "les"), ("Ulang tahun", "ultah"), ("Arisan & keluarga", "arisan"), ("Komunitas & kantor", "komunitas"), ("Sekolah", "sekolah"), ("Musiman", "musiman"), ("Galeri", "kegiatan"), ("Tanya jawab", "faq")])
 b += section("tiket", "Tiket & langganan", "Untuk keluarga yang ingin berenang kapan saja.", [
   card("Tiket harian", "Akses kolam dewasa dan kolam anak. Buka Senin–Kamis 09.00–17.00, Sabtu–Minggu 08.00–17.00. Jumat libur.", "Rp 20.000, dewasa dan anak", go="Tanya admin kolam", wa="kolam", img="kolam-perosotan", alt="Kolam anak Pilarmas dengan perosotan"),
   card("Kartu langganan 10x", "Bayar 8 kali, berenang 10 kali. Berlaku 3 bulan dan bisa dipakai bergantian dalam satu keluarga.", "Harga 8 tiket", tag="Paling hemat", go="Beli kartu langganan", wa="kolam"),
@@ -363,6 +399,15 @@ b += section("musiman", "Program musiman", None, [
   card("Lomba air 17 Agustus", "Lomba air untuk anak dan keluarga.", "Tanya biaya pendaftaran", "Setiap Agustus", go="Info lomba", wa="acara"),
   card("Paket halal bihalal", "Paket kumpul keluarga besar dan kantor setelah Lebaran.", "Mulai Rp 75.000/orang", "Bulan Syawal", go="Pesan tempat", wa="acara"),
 ])
+b += kegiatan("kegiatan", "Galeri kegiatan", "Kunjungan sekolah, acara komunitas, dan liburan keluarga yang pernah berlangsung di Pilarmas. Ketuk foto untuk memperbesar.", [
+  ("g-libur-perosotan", "Libur akhir tahun", "Desember 2025", "Anak-anak meluncur di perosotan kolam anak saat libur akhir tahun", "tall"),
+  ("g-manasik-anak", "Manasik haji anak", "Desember 2025", "Anak-anak berpakaian ihram berlatih tawaf di replika Ka'bah", "tall"),
+  ("g-komunitas-ibu", "Kumpul komunitas di saung", "Februari 2026", "Rombongan ibu-ibu berbincang dan makan bersama di saung", "wide"),
+  ("g-pentas-sekolah", "Pentas siswa di panggung", "Juni 2026", "Siswa TK tampil di panggung dengan pendamping guru", "tall"),
+  ("g-paud-bermain", "Bermain bersama PAUD", "Juni 2026", "Anak PAUD dan orang tua bermain melingkar di aula", "tall"),
+  ("g-edutrip-anggur", "Edu Trip kebun anggur", "September 2026", "Siswa TK memegang anggur hasil petik di kebun Pilarmas", "tall"),
+  ("g-lomba-gathering", "Lomba saat gathering", "Juli 2025", "Peserta gathering berkaos biru mengikuti lomba di halaman", "tall"),
+], "kolam", alt=True)
 b += faq("Tanya jawab", [
   ("Kolam buka jam berapa?", "Senin sampai Kamis pukul 09.00–17.00, Sabtu dan Minggu pukul 08.00–17.00. Hari Jumat kolam libur. Saat libur panjang, cek dulu ke admin."),
   ("Di mana lokasinya?", "Kolam Renang Pilar Mas ada di Baros, Kota Sukabumi, Jawa Barat 43161. Cari \"Kolam Renang Pilar Mas\" di Google Maps."),
@@ -426,7 +471,7 @@ write("ulang-tahun.html", b)
 # ======================= HD STAR =======================
 b = head("HD Star Course Pilarmas", "Les bahasa Inggris HD Star Course untuk anak dan remaja di Sukabumi.") + topbar("hd-star.html")
 b += pagehero("HD Star Course", "Anak berani bicara bahasa Inggris", "Kelas kecil, belajar aktif, dan banyak praktik bicara. Ada kelas di luar ruangan supaya anak tidak bosan.", f'<a class="btn brass" href="https://daftarsiswahd.pilarmas.online/">Daftar online</a><a class="btn ghost" data-wa="hdstar" data-msg="Halo HD Star, saya mau tanya kelas untuk anak saya." href="#kontak">{I["wa"]}Tanya admin</a>', mascot="logo-hdstar.webp")
-b += subnav([("Kelas", "kelas"), ("Program khusus", "khusus"), ("Untuk sekolah", "sekolah"), ("Cara daftar", "daftar"), ("Tanya jawab", "faq")])
+b += subnav([("Kelas", "kelas"), ("Program khusus", "khusus"), ("Untuk sekolah", "sekolah"), ("Cara daftar", "daftar"), ("Galeri", "kegiatan"), ("Tanya jawab", "faq")])
 b += section("kelas", "Kelas sesuai usia", "Setiap murid baru ikut tes penempatan, lalu orang tua menerima laporan perkembangan berkala.", [
   card("Kids English", "Usia 5 sampai 8 tahun. Kosakata, lagu, cerita, dan games.", "Tanya biaya bulanan", tag="Anak", go="Tanya jadwal", wa="hdstar"),
   card("Juniors English", "Usia 9 sampai 12 tahun. Percakapan sehari-hari, membaca, dan menulis sederhana.", "Tanya biaya bulanan", tag="Paling diminati", go="Tanya jadwal", wa="hdstar", big=True),
@@ -445,6 +490,10 @@ b += section("sekolah", "Kerja sama dengan sekolah", None, [
   card("Edu Trip Pilarmas", "Kunjungan sekolah ke Pilarmas: renang, edukasi air bersih, dan games bahasa Inggris.", "Mulai Rp 45.000/siswa", go="Lihat Edu Trip", href="edu-wisata.html#sekolah"),
 ])
 b += steps("daftar", "Cara daftar", [("Isi formulir online", "Daftar di daftarsiswahd.pilarmas.online atau chat admin."), ("Kelas coba", "Anak ikut satu sesi dan tes penempatan."), ("Pilih jadwal", "Admin bantu mencari kelas yang pas."), ("Mulai belajar", "Laporan perkembangan dikirim berkala.")], alt=True)
+b += kegiatan("kegiatan", "Galeri kegiatan", "Lomba dan kegiatan siswa HD Star. Ketuk foto untuk memperbesar.", [
+  ("foto-spelling-bee", "Spelling Bee Contest", "Juni 2026", "Peserta Spelling Bee Contest HD Star di panggung", "tall"),
+  ("g-spelling-bee-2", "Peserta tampil di panggung", "Juni 2026", "Peserta menjawab soal di depan juri Spelling Bee HD Star", "tall"),
+], "hdstar", extra='<div class="k-note">' + char("tanbo", "k-note-char") + '<h3>Mau anak ikut kegiatan seperti ini?</h3><p>Siswa HD Star berlatih bicara bahasa Inggris di kelas, lalu tampil di acara seperti Spelling Bee.</p><a class="btn brass" href="https://daftarsiswahd.pilarmas.online/">Daftar online</a></div>')
 b += faq("Tanya jawab", [("Berapa murid dalam satu kelas?", "Kelas dibuat kecil supaya setiap anak mendapat giliran bicara. Tanyakan jumlah pastinya ke admin."), ("Kalau anak tidak masuk, bisa diganti?", "Tanyakan kebijakan kelas pengganti ke admin saat mendaftar."), ("Apakah ada kelas untuk dewasa?", "Saat ini kelas difokuskan untuk anak dan remaja. Kelas privat bisa untuk dewasa.")])
 b += foot()
 write("hd-star.html", b)

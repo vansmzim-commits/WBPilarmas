@@ -141,3 +141,15 @@ if (toggle) {
 /* Kartu teman Pilarmas: ketuk untuk menyapa */
 for (const p of $$(".pal")) p.addEventListener("click", () => { p.classList.remove("hop"); void p.offsetWidth; p.classList.add("hop"); });
 }
+
+/* Galeri kegiatan: perbesar foto */
+(() => {
+  const lb = document.getElementById("lb");
+  if (!lb || !lb.showModal) return;
+  const img = lb.querySelector("img"), cap = lb.querySelector("p");
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-lb]");
+    if (b) { img.src = b.dataset.lb; img.alt = b.dataset.cap || ""; cap.textContent = b.dataset.cap || ""; lb.showModal(); return; }
+    if (e.target === lb || e.target.closest(".lb-x")) lb.close();
+  });
+})();
