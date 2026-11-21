@@ -120,7 +120,7 @@ def foot():
     <div><h2>Tanya langsung ke admin</h2><p>Pilih kebutuhan Anda. Tombol membuka WhatsApp admin divisi yang tepat.</p></div>
     <div class="wa-grid">{"".join(f'<a data-wa="{k}" href="#kontak">{I["wa"]}{E(t)}</a>' for k, t in btns)}</div>
     <nav aria-label="Semua halaman"><a href="index.html">Beranda</a>{"".join(f'<a href="{h}">{E(n)}</a>' for n, h, *_ in DIVS)}<a href="ulang-tahun.html">Paket ulang tahun</a></nav>
-    <small>Kolam Renang Pilar Mas, Baros, Kota Sukabumi, Jawa Barat 43161. Buka setiap hari, Senin–Jumat 09.00–17.00, Sabtu–Minggu 08.00–17.00. <a href="https://www.google.com/maps/search/?api=1&query=Kolam+Renang+Pilar+Mas&query_place_id=ChIJv0X-8mlHaC4R28F2sM2gNaU" style="color:#FFE29A">Buka di Google Maps</a>. Harga paket di situs ini masih draf dan dapat berubah.</small>
+    <small>Kolam Renang Pilar Mas, Baros, Kota Sukabumi, Jawa Barat 43161. Senin–Kamis 09.00–17.00, Sabtu–Minggu 08.00–17.00, Jumat libur. <a href="https://www.google.com/maps/search/?api=1&query=Kolam+Renang+Pilar+Mas&query_place_id=ChIJv0X-8mlHaC4R28F2sM2gNaU" style="color:#FFE29A">Buka di Google Maps</a>. Harga paket di situs ini masih draf dan dapat berubah.</small>
   </div>
 </footer>
 <script src="assets/app.js"></script>
@@ -210,7 +210,7 @@ SCENE = '''<svg class="scene" viewBox="0 0 640 440" role="img" aria-label="Ilust
 TILES = [
  ("Les renang anak", "Kelas per level dari usia 3 tahun, ada sertifikat naik level.", "Mulai Rp 250.000/bulan", "Edu Wisata", "edu-wisata.html#les", "anak"),
  ("Paket ulang tahun", "Pesta di kolam untuk 20 anak, sudah termasuk dekor, snack, dan MC.", "Mulai Rp 40.000/anak", "Edu Wisata", "ulang-tahun.html", "anak keluarga"),
- ("Tiket renang harian", "Kolam dewasa dan kolam anak, buka setiap hari.", "Rp 20.000, dewasa dan anak, setiap hari", "Edu Wisata", "edu-wisata.html#tiket", "keluarga anak"),
+ ("Tiket renang harian", "Kolam dewasa dan kolam anak, buka Sabtu sampai Kamis.", "Rp 20.000, dewasa dan anak", "Edu Wisata", "edu-wisata.html#tiket", "keluarga anak"),
  ("Kartu langganan 10x", "Bayar 8 kali, berenang 10 kali. Berlaku 3 bulan.", "Hemat 2 tiket", "Edu Wisata", "edu-wisata.html#tiket", "keluarga"),
  ("Arisan santai", "Gazebo 3 jam di hari kerja, mama ngobrol, anak berenang.", "Rp 45.000/orang", "Edu Wisata", "edu-wisata.html#arisan", "keluarga komunitas"),
  ("Kumpul keluarga besar", "Area semi-privat, prasmanan, dan renang untuk semua.", "Mulai Rp 75.000/orang", "Edu Wisata", "edu-wisata.html#arisan", "keluarga"),
@@ -254,7 +254,7 @@ b += f'''<main id="isi">
     <h1>Hari ini mau berenang, belajar, atau merayakan sesuatu?</h1>
     <p class="lead">Pilarmas adalah tempat wisata air dan keluarga usaha di Sukabumi: kolam renang, les renang dan bahasa Inggris, sampai internet dan air minum untuk rumah Anda.</p>
     <div class="cta"><a class="btn wa" href="#cari">Cari program</a><a class="btn ghost" href="ulang-tahun.html">Lihat paket ulang tahun</a></div>
-    <ul class="facts"><li>Rating 4,5 di Google</li><li>Buka setiap hari</li><li>Tiket Rp 20.000</li><li>Kolam anak dan dewasa</li></ul>
+    <ul class="facts"><li>Rating 4,5 di Google</li><li>Jumat libur</li><li>Tiket Rp 20.000</li><li>Kolam anak dan dewasa</li></ul>
   </div>
   <div class="scene mascot">{char("monpil", "hero-char")}<span class="splash" aria-hidden="true"></span><img src="assets/logo-pilarmas.webp" alt="Logo Pilarmas Kolam Renang Keluarga: pulau dengan pohon kelapa dan hammock di tengah air" width="1100" height="568"></div>
 </div></section>
@@ -294,7 +294,7 @@ b += f'''<section class="band pals-band" id="teman"><div class="wrap">
 </div></section>'''
 b += f'''<section class="band" id="lokasi"><div class="wrap visit">
   <div><h2>Mampir ke Pilarmas</h2><p class="lead">Udara Sukabumi yang sejuk, kolam yang bersih, dan tempat duduk teduh untuk orang tua.</p>
-  <dl><dt>Lokasi</dt><dd>Baros, Kota Sukabumi, Jawa Barat 43161</dd><dt>Senin–Jumat</dt><dd>09.00–17.00</dd><dt>Sabtu–Minggu</dt><dd>08.00–17.00</dd><dt>Tiket</dt><dd>Rp 20.000, dewasa dan anak, setiap hari</dd><dt>Ulasan</dt><dd>4,5 dari 5 di Google, 373 ulasan</dd></dl>
+  <dl><dt>Lokasi</dt><dd>Baros, Kota Sukabumi, Jawa Barat 43161</dd><dt>Senin–Kamis</dt><dd>09.00–17.00</dd><dt>Sabtu–Minggu</dt><dd>08.00–17.00</dd><dt>Jumat</dt><dd>Libur</dd><dt>Tiket</dt><dd>Rp 20.000, dewasa dan anak</dd><dt>Ulasan</dt><dd>4,5 dari 5 di Google, 373 ulasan</dd></dl>
   <div class="cta"><a class="btn wa" href="https://www.google.com/maps/search/?api=1&query=Kolam+Renang+Pilar+Mas&query_place_id=ChIJv0X-8mlHaC4R28F2sM2gNaU">Buka di Google Maps</a><a class="btn ghost" data-wa="kolam" data-msg="Halo Pilarmas, hari ini buka jam berapa?" href="#kontak">Tanya jam buka</a></div></div>
   <figure class="map"><img src="assets/peta-pilarmas.webp" alt="Peta ilustrasi kawasan Pilarmas: kolam renang, gazebo, gedung, dan sawah di sekitarnya" width="669" height="909" loading="lazy"><figcaption>Peta ilustrasi kawasan Pilarmas</figcaption></figure>
 </div></section>
@@ -307,7 +307,7 @@ b = head("Edu Wisata Kolam Renang", "Tiket, les renang, paket ulang tahun, arisa
 b += pagehero("Edu Wisata Kolam Renang", "Edu Wisata Kolam Renang Pilarmas", "Datang untuk berenang bersama keluarga, ikut les renang, atau pesan tempat untuk ulang tahun, arisan, gathering, dan kunjungan sekolah.", f'<a class="btn brass" data-wa="kolam" href="#kontak">{I["wa"]}Tanya admin kolam</a>', mascot="logo-pilarmas.webp")
 b += subnav([("Tiket", "tiket"), ("Fasilitas", "fasilitas"), ("Les renang", "les"), ("Ulang tahun", "ultah"), ("Arisan & keluarga", "arisan"), ("Komunitas & kantor", "komunitas"), ("Sekolah", "sekolah"), ("Musiman", "musiman"), ("Tanya jawab", "faq")])
 b += section("tiket", "Tiket & langganan", "Untuk keluarga yang ingin berenang kapan saja.", [
-  card("Tiket harian", "Akses kolam dewasa dan kolam anak. Buka Senin–Jumat 09.00–17.00, Sabtu–Minggu 08.00–17.00.", "Rp 20.000, dewasa dan anak, setiap hari", go="Tanya admin kolam", wa="kolam", img="kolam-perosotan", alt="Kolam anak Pilarmas dengan perosotan"),
+  card("Tiket harian", "Akses kolam dewasa dan kolam anak. Buka Senin–Kamis 09.00–17.00, Sabtu–Minggu 08.00–17.00. Jumat libur.", "Rp 20.000, dewasa dan anak", go="Tanya admin kolam", wa="kolam", img="kolam-perosotan", alt="Kolam anak Pilarmas dengan perosotan"),
   card("Kartu langganan 10x", "Bayar 8 kali, berenang 10 kali. Berlaku 3 bulan dan bisa dipakai bergantian dalam satu keluarga.", "Harga 8 tiket", tag="Paling hemat", go="Beli kartu langganan", wa="kolam"),
   card("Sewa kolam privat", "Kolam ditutup untuk umum selama 2 sampai 3 jam, khusus keluarga atau rombongan Anda, di luar jam ramai.", "Mulai Rp 1.500.000 per sesi", go="Cek tanggal", wa="acara", img="kolam-utama", alt="Kolam utama Pilarmas dengan gazebo biru"),
 ])
@@ -336,7 +336,7 @@ b += "".join([
 b += "</div>" + perks(["Diskon untuk kakak-adik", "Bayar 3 bulan, gratis 1 sesi", "Sertifikat setiap naik level", "Rapor kemajuan untuk orang tua"]) + "</div></section>"
 b += promo("Daftar les renang secara online", "Isi formulir pendaftaran, lalu admin menghubungi Anda untuk tes level dan jadwal kelas.", "Buka formulir les renang", href="https://daftarlesrenang.pilarmas.online/")
 b += section("ultah", "Paket ulang tahun anak", "Untuk 20 anak, sudah termasuk tiket renang, dekor, snack, MC, dan games air.", [
-  card("Hemat", "Pesta simpel di pinggir kolam, boleh bawa kue sendiri. Senin sampai Jumat, 2 jam.", "Rp 40.000/anak", go="Lihat isi paket", href="ulang-tahun.html#paket"),
+  card("Hemat", "Pesta simpel di pinggir kolam, boleh bawa kue sendiri. Senin sampai Kamis, 2 jam.", "Rp 40.000/anak", go="Lihat isi paket", href="ulang-tahun.html#paket"),
   card("Reguler", "Ditambah nasi box, kue 18 cm, dekor tema, goodie bag, dan gazebo. 2,5 jam.", "Rp 85.000/anak", tag="Paling laris", go="Lihat isi paket", href="ulang-tahun.html#paket", big=True),
   card("Premium", "Dekor tema penuh, kue karakter, badut atau MC profesional, dan foto 1 jam. 3 jam.", "Rp 150.000/anak", go="Lihat isi paket", href="ulang-tahun.html#paket"),
 ])
@@ -352,7 +352,7 @@ b += section("komunitas", "Gathering komunitas & perusahaan", "Untuk kantor, pab
   card("Rekreasi majelis taklim", "Jadwal khusus, konsumsi, dan waktu salat yang sudah diatur.", "Mulai Rp 45.000/orang", go="Pesan tempat", wa="acara"),
   card("Lomba renang Pilarmas", "Lomba antar-sekolah dan komunitas yang diadakan Pilarmas. Terbuka untuk sponsor.", "Pendaftaran mulai Rp 50.000 per nomor", go="Info lomba dan sponsor", wa="acara"),
 ])
-b += section("sekolah", "Program untuk sekolah", "Jadwal Senin sampai Jumat, untuk TK, SD, dan SMP.", [
+b += section("sekolah", "Program untuk sekolah", "Jadwal Senin sampai Kamis, untuk TK, SD, dan SMP.", [
   card("Edu Trip Pilarmas", "Satu hari kunjungan dengan tiga pos belajar:", "Mulai Rp 45.000/siswa", "Minimal 30 siswa, termasuk snack dan sertifikat", tag="Hanya di Pilarmas", go="Ajukan jadwal kunjungan", wa="acara", big=True,
        bullets=["Renang dan keselamatan di air", "Dari mana air minum kita? bersama Hydro Pilarmas", "Games bahasa Inggris bersama HD Star"], img="edu-trip", alt="Rombongan TK belajar di kebun anggur Pilarmas"),
   card("Outing class dan market day", "Kegiatan bebas sekolah di area Pilarmas, ditutup dengan berenang.", "Mulai Rp 30.000/siswa", go="Ajukan jadwal", wa="acara", img="manasik", alt="Rombongan sekolah di acara manasik Pilarmas"),
@@ -364,7 +364,7 @@ b += section("musiman", "Program musiman", None, [
   card("Paket halal bihalal", "Paket kumpul keluarga besar dan kantor setelah Lebaran.", "Mulai Rp 75.000/orang", "Bulan Syawal", go="Pesan tempat", wa="acara"),
 ])
 b += faq("Tanya jawab", [
-  ("Kolam buka jam berapa?", "Senin sampai Jumat pukul 09.00–17.00, Sabtu dan Minggu pukul 08.00–17.00. Saat libur panjang, cek dulu ke admin."),
+  ("Kolam buka jam berapa?", "Senin sampai Kamis pukul 09.00–17.00, Sabtu dan Minggu pukul 08.00–17.00. Hari Jumat kolam libur. Saat libur panjang, cek dulu ke admin."),
   ("Di mana lokasinya?", "Kolam Renang Pilar Mas ada di Baros, Kota Sukabumi, Jawa Barat 43161. Cari \"Kolam Renang Pilar Mas\" di Google Maps."),
   ("Apakah ada kolam khusus anak?", "Ada. Kolam anak terpisah dari kolam dewasa, dan lifeguard berjaga selama jam buka."),
   ("Apakah anak harus didampingi?", "Ya. Anak yang berenang tetap wajib didampingi orang tua atau pendamping dewasa."),
@@ -374,9 +374,9 @@ b += foot()
 write("edu-wisata.html", b)
 
 # ======================= ULANG TAHUN =======================
-PK = [("hemat", "Hemat", 40000, 50000, "Pesta simpel, boleh bawa kue sendiri", "Senin sampai Jumat, 2 jam", ["Tiket renang anak", "Area pesta di pinggir kolam", "Snack box: roti 2 pcs dan air mineral", "Balon dan backdrop Happy Birthday", "MC dan games air oleh pelatih kami", "Topi ulang tahun dan undangan digital", "Hadiah untuk yang berulang tahun"], False),
-      ("reguler", "Reguler", 85000, 95000, "Paling lengkap untuk harganya", "Setiap hari, 2,5 jam", ["Semua isi paket Hemat", "Gazebo atau area semi-privat", "Nasi box anak: ayam, nasi, minum", "Kue ulang tahun 18 cm", "Dekor tema pilihan", "Goodie bag untuk setiap anak", "Gratis 2 pendamping"], True),
-      ("premium", "Premium", 150000, 150000, "Semua kami urus", "Setiap hari, harga sama, 3 jam", ["Semua isi paket Reguler", "Dekor tema penuh dengan arch balon", "Kue karakter atau 2 tingkat", "Badut atau MC profesional", "Es krim dan goodie bag premium", "Dokumentasi foto 1 jam", "Lifeguard khusus rombongan", "Gratis 5 pendamping"], False)]
+PK = [("hemat", "Hemat", 40000, 50000, "Pesta simpel, boleh bawa kue sendiri", "Senin sampai Kamis, 2 jam", ["Tiket renang anak", "Area pesta di pinggir kolam", "Snack box: roti 2 pcs dan air mineral", "Balon dan backdrop Happy Birthday", "MC dan games air oleh pelatih kami", "Topi ulang tahun dan undangan digital", "Hadiah untuk yang berulang tahun"], False),
+      ("reguler", "Reguler", 85000, 95000, "Paling lengkap untuk harganya", "Sabtu sampai Kamis, 2,5 jam", ["Semua isi paket Hemat", "Gazebo atau area semi-privat", "Nasi box anak: ayam, nasi, minum", "Kue ulang tahun 18 cm", "Dekor tema pilihan", "Goodie bag untuk setiap anak", "Gratis 2 pendamping"], True),
+      ("premium", "Premium", 150000, 150000, "Semua kami urus", "Sabtu sampai Kamis, harga sama, 3 jam", ["Semua isi paket Reguler", "Dekor tema penuh dengan arch balon", "Kue karakter atau 2 tingkat", "Badut atau MC profesional", "Es krim dan goodie bag premium", "Dokumentasi foto 1 jam", "Lifeguard khusus rombongan", "Gratis 5 pendamping"], False)]
 AD = [("Kue ulang tahun 18 cm", 185000, "acara"), ("Kue karakter atau 2 tingkat", 325000, "acara"), ("Nasi box anak", 22000, "anak"), ("Goodie bag", 10000, "anak"), ("Es krim cup", 7500, "anak"), ("Badut atau MC profesional", 425000, "acara"), ("Dekor tema penuh", 350000, "acara"), ("Dokumentasi foto 1 jam", 250000, "acara"), ("Photobooth dan cetak foto", 450000, "acara"), ("Tambahan waktu 1 jam", 150000, "acara")]
 rp = lambda n: "Rp " + f"{n:,}".replace(",", ".")
 b = head("Paket ulang tahun Pilarmas", "Paket ulang tahun anak di kolam renang Pilarmas Sukabumi untuk 20 anak, mulai Rp 40.000 per anak.") + topbar("ulang-tahun.html")
@@ -413,7 +413,7 @@ b += f'''</div>
 <div style="overflow-x:auto"><table class="addon"><thead><tr><th>Tambahan</th><th>Harga</th></tr></thead><tbody>{"".join(f"<tr><td>{E(n)}</td><td>{rp(p)}{'/anak' if per == 'anak' else ''}</td></tr>" for n, p, per in AD)}<tr><td>Nasi box pendamping dewasa</td><td>Rp 27.000/orang</td></tr></tbody></table></div>
 </div></section>
 <section class="band" id="syarat"><div class="wrap terms">
-<div><h2 style="margin-bottom:16px">Syarat & ketentuan</h2><ul><li>Minimal 20 anak per acara.</li><li>Pesan paling lambat 5 hari sebelumnya, Premium 7 hari, dengan DP 50%.</li><li>Paket Hemat hanya Senin sampai Jumat.</li><li>Akhir pekan dan libur nasional: Hemat dan Reguler tambah Rp 10.000 per anak.</li><li>Pendamping di luar kuota gratis membayar tiket biasa.</li><li>Makanan dari luar tidak diperbolehkan, kecuali kue ulang tahun.</li><li>Anak berenang dengan didampingi orang tua. Lifeguard kami berjaga selama acara.</li></ul></div>
+<div><h2 style="margin-bottom:16px">Syarat & ketentuan</h2><ul><li>Minimal 20 anak per acara.</li><li>Pesan paling lambat 5 hari sebelumnya, Premium 7 hari, dengan DP 50%.</li><li>Paket Hemat hanya Senin sampai Kamis. Hari Jumat kolam libur.</li><li>Akhir pekan dan libur nasional: Hemat dan Reguler tambah Rp 10.000 per anak.</li><li>Pendamping di luar kuota gratis membayar tiket biasa.</li><li>Makanan dari luar tidak diperbolehkan, kecuali kue ulang tahun.</li><li>Anak berenang dengan didampingi orang tua. Lifeguard kami berjaga selama acara.</li></ul></div>
 <div class="faq" id="faq"><h2 style="margin-bottom:6px">Tanya jawab</h2>
 <details><summary>Boleh bawa kue sendiri?{I["plus"]}</summary><p class="ans">Boleh, di semua paket, tanpa biaya tambahan.</p></details>
 <details><summary>Kalau hujan bagaimana?{I["plus"]}</summary><p class="ans">Acara dipindah ke area teduh. Jadwal ulang bisa dibicarakan dengan admin.</p></details>
