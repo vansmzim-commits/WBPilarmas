@@ -1,6 +1,11 @@
 import os, html
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 os.makedirs(OUT + "/assets", exist_ok=True)
+import hashlib
+def _ver(n):
+    try: return hashlib.md5(open(os.path.join(OUT, "assets", n), "rb").read()).hexdigest()[:8]
+    except OSError: return "1"
+VER_CSS, VER_JS = _ver("style.css"), _ver("app.js")
 E = html.escape
 
 I = {
@@ -69,7 +74,7 @@ def head(title, desc):
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc)}">
 {FONTS}
-<link rel="icon" href="assets/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png"><meta name="theme-color" content="#1673AE"><link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="assets/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png"><meta name="theme-color" content="#1673AE"><link rel="stylesheet" href="assets/style.css?v={VER_CSS}">
 </head>
 <body>
 <a class="skip" href="#isi">Langsung ke isi</a>'''
@@ -124,7 +129,7 @@ def foot():
   </div>
 </footer>
 {LIGHTBOX}
-<script src="assets/app.js"></script>
+<script src="assets/app.js?v={VER_JS}"></script>
 </body>
 </html>'''
 
