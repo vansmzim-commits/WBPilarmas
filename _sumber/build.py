@@ -74,7 +74,15 @@ def head(title, desc):
 <body>
 <a class="skip" href="#isi">Langsung ke isi</a>'''
 
+PAGE_WA = {"hd-star.html": ("hdstar", "HD Star", "Halo admin HD Star, saya mau tanya kelas bahasa Inggris."),
+           "globe-net.html": ("globenet", "Globe.Net", "Halo admin Globe.Net, saya mau tanya paket internet."),
+           "hydro.html": ("hydro", "Hydro", "Halo admin Hydro Pilarmas, saya mau pesan air galon."),
+           "global-hospitality.html": ("gh", "Global Hospitality", "Halo admin Global Hospitality, saya mau konsultasi program."),
+           "ulang-tahun.html": ("acara", "acara", "Halo admin Pilarmas, saya mau tanya paket ulang tahun.")}
+
 def topbar(active):
+    wk, wn, wm = PAGE_WA.get(active, ("kolam", "Pilarmas", "Halo admin Pilarmas, saya mau tanya."))
+    wlabel = "Chat admin" if wk == "kolam" else f"Chat admin {wn}"
     cols = "".join(f'''<div class="col" style="--i:{i}"><h3><a href="{href}"><span class="dot" style="background:{c}"></span>{E(n)}</a></h3><p>{E(d)}</p><ul>{"".join(f'<li><a href="{h}">{E(t)}</a></li>' for t, h in progs)}</ul></div>''' for i, (n, href, c, d, progs) in enumerate(DIVS))
     drawer_items = "".join(f'''<details style="--i:{i+1}"><summary>{E(n)}{I["plus"]}</summary><ul><li><a href="{href}">Semua program {E(n.split(" ")[0] if n.startswith("Edu") else n)}</a></li>{"".join(f'<li><a href="{h}">{E(t)}</a></li>' for t, h in progs)}</ul></details>''' for i, (n, href, c, d, progs) in enumerate(DIVS))
     def nl(label, href):
@@ -90,7 +98,7 @@ def topbar(active):
       {nl("Les renang", "edu-wisata.html#les")}
       <a href="#kontak">Kontak</a>
     </nav>
-    <a class="btn wa" data-wa="kolam" href="#kontak">{I["wa"]}Chat admin</a>
+    <a class="btn wa" data-wa="{wk}" data-msg="{E(wm)}" href="#kontak">{I["wa"]}{E(wlabel if wk == "kolam" else "Chat admin")}</a>
     <button class="burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Buka menu">{I["menu"]}</button>
   </div>
   <div class="mega" id="mega"><div class="wrap">{cols}</div></div>
@@ -100,7 +108,7 @@ def topbar(active):
   <a class="item" href="index.html" style="--i:0">Beranda</a>
   {drawer_items}
   <a class="item" href="ulang-tahun.html" style="--i:6">Paket ulang tahun</a>
-  <a class="btn brass" data-wa="kolam" href="#kontak">{I["wa"]}Chat admin Pilarmas</a>
+  <a class="btn brass" data-wa="{wk}" data-msg="{E(wm)}" href="#kontak">{I["wa"]}{E(wlabel if wk != "kolam" else "Chat admin Pilarmas")}</a>
 </div>'''
 
 def foot():
