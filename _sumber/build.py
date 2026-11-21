@@ -58,7 +58,7 @@ def tetes(cls="", pose="wave", label=None):
 </svg>'''
 
 CHARS = {"bae": "Bae", "bungjin": "Bung Jin", "halaf": "Halaf", "kuya": "Kuya", "monpil": "Monpil & Ubbie", "tanbo": "Tanbo"}
-ANIM = {"bae": (254, 300), "kuya": (180, 300), "tanbo": (250, 260)}  # karakter animasi (WebP bergerak)
+ANIM = {"bae": (254, 300), "kuya": (180, 300), "tanbo": (250, 260), "monpil": (300, 298), "bungjin": (210, 300), "halaf": (232, 300)}  # karakter animasi (WebP bergerak)
 CSZ = {"bae": (411, 520), "bungjin": (347, 520), "halaf": (390, 520), "kuya": (301, 520), "monpil": (508, 520), "tanbo": (358, 520)}
 def char(key, cls="", alt=True, id_=None):
     w, h = CSZ[key]

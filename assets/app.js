@@ -1,7 +1,7 @@
 {
 /* Nomor WhatsApp tiap divisi. Isi dengan format 62xxxxxxxxxx (tanpa + atau 0 di depan). */
 /* Karakter bergerak: kembali ke gambar diam bila pengunjung memilih kurangi gerakan */
-const ANIM = ["bae", "kuya", "tanbo"];
+const ANIM = ["bae", "kuya", "tanbo", "monpil", "bungjin", "halaf"];
 const RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 if (RM) document.querySelectorAll("img[data-still]").forEach((im) => { im.src = im.dataset.still; });
 const WA = { kolam: "6285797810150", les: "6285797810150", acara: "6285797810150", hdstar: "628119782025", globenet: "6281563368849", hydro: "628139522476", gh: "628119112025" };
