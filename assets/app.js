@@ -1,6 +1,6 @@
 {
 /* Nomor WhatsApp tiap divisi. Isi dengan format 62xxxxxxxxxx (tanpa + atau 0 di depan). */
-const WA = { kolam: "6285797810150", les: "6285797810150", acara: "6285797810150", hdstar: "628119782025", globenet: "6281563368849", hydro: "628139522476", gh: "6285797810150" };
+const WA = { kolam: "6285797810150", les: "6285797810150", acara: "6285797810150", hdstar: "628119782025", globenet: "6281563368849", hydro: "628139522476", gh: "628119112025" };
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
