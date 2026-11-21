@@ -210,7 +210,7 @@ SCENE = '''<svg class="scene" viewBox="0 0 640 440" role="img" aria-label="Ilust
 TILES = [
  ("Les renang anak", "Kelas per level dari usia 3 tahun, ada sertifikat naik level.", "Mulai Rp 250.000/bulan", "Edu Wisata", "edu-wisata.html#les", "anak"),
  ("Paket ulang tahun", "Pesta di kolam untuk 20 anak, sudah termasuk dekor, snack, dan MC.", "Mulai Rp 40.000/anak", "Edu Wisata", "ulang-tahun.html", "anak keluarga"),
- ("Tiket renang harian", "Kolam dewasa dan kolam anak, buka setiap hari.", "Rp 15.000 hari kerja, Rp 20.000 akhir pekan", "Edu Wisata", "edu-wisata.html#tiket", "keluarga anak"),
+ ("Tiket renang harian", "Kolam dewasa dan kolam anak, buka setiap hari.", "Rp 20.000, dewasa dan anak, setiap hari", "Edu Wisata", "edu-wisata.html#tiket", "keluarga anak"),
  ("Kartu langganan 10x", "Bayar 8 kali, berenang 10 kali. Berlaku 3 bulan.", "Hemat 2 tiket", "Edu Wisata", "edu-wisata.html#tiket", "keluarga"),
  ("Arisan santai", "Gazebo 3 jam di hari kerja, mama ngobrol, anak berenang.", "Rp 45.000/orang", "Edu Wisata", "edu-wisata.html#arisan", "keluarga komunitas"),
  ("Kumpul keluarga besar", "Area semi-privat, prasmanan, dan renang untuk semua.", "Mulai Rp 75.000/orang", "Edu Wisata", "edu-wisata.html#arisan", "keluarga"),
@@ -234,7 +234,7 @@ b += f'''<main id="isi">
     <h1>Hari ini mau berenang, belajar, atau merayakan sesuatu?</h1>
     <p class="lead">Pilarmas adalah tempat wisata air dan keluarga usaha di Sukabumi: kolam renang, les renang dan bahasa Inggris, sampai internet dan air minum untuk rumah Anda.</p>
     <div class="cta"><a class="btn wa" href="#cari">Cari program</a><a class="btn ghost" href="ulang-tahun.html">Lihat paket ulang tahun</a></div>
-    <ul class="facts"><li>Rating 4,5 di Google</li><li>Buka setiap hari</li><li>Tiket mulai Rp 15.000</li><li>Kolam anak dan dewasa</li></ul>
+    <ul class="facts"><li>Rating 4,5 di Google</li><li>Buka setiap hari</li><li>Tiket Rp 20.000</li><li>Kolam anak dan dewasa</li></ul>
   </div>
   <div class="scene mascot">{char("monpil", "hero-char")}<span class="splash" aria-hidden="true"></span><img src="assets/logo-pilarmas.webp" alt="Logo Pilarmas Kolam Renang Keluarga: pulau dengan pohon kelapa dan hammock di tengah air" width="1100" height="568"></div>
 </div></section>
@@ -274,7 +274,7 @@ b += f'''<section class="band pals-band" id="teman"><div class="wrap">
 </div></section>'''
 b += f'''<section class="band" id="lokasi"><div class="wrap visit">
   <div><h2>Mampir ke Pilarmas</h2><p class="lead">Udara Sukabumi yang sejuk, kolam yang bersih, dan tempat duduk teduh untuk orang tua.</p>
-  <dl><dt>Lokasi</dt><dd>Baros, Kota Sukabumi, Jawa Barat 43161</dd><dt>Senin–Jumat</dt><dd>09.00–17.00</dd><dt>Sabtu–Minggu</dt><dd>08.00–17.00</dd><dt>Tiket</dt><dd>Rp 15.000 hari kerja, Rp 20.000 akhir pekan</dd><dt>Ulasan</dt><dd>4,5 dari 5 di Google, 373 ulasan</dd></dl>
+  <dl><dt>Lokasi</dt><dd>Baros, Kota Sukabumi, Jawa Barat 43161</dd><dt>Senin–Jumat</dt><dd>09.00–17.00</dd><dt>Sabtu–Minggu</dt><dd>08.00–17.00</dd><dt>Tiket</dt><dd>Rp 20.000, dewasa dan anak, setiap hari</dd><dt>Ulasan</dt><dd>4,5 dari 5 di Google, 373 ulasan</dd></dl>
   <div class="cta"><a class="btn wa" href="https://www.google.com/maps/search/?api=1&query=Kolam+Renang+Pilar+Mas&query_place_id=ChIJv0X-8mlHaC4R28F2sM2gNaU">Buka di Google Maps</a><a class="btn ghost" data-wa="kolam" data-msg="Halo Pilarmas, hari ini buka jam berapa?" href="#kontak">Tanya jam buka</a></div></div>
   <figure class="map"><img src="assets/peta-pilarmas.webp" alt="Peta ilustrasi kawasan Pilarmas: kolam renang, gazebo, gedung, dan sawah di sekitarnya" width="669" height="909" loading="lazy"><figcaption>Peta ilustrasi kawasan Pilarmas</figcaption></figure>
 </div></section>
@@ -287,7 +287,7 @@ b = head("Edu Wisata Kolam Renang", "Tiket, les renang, paket ulang tahun, arisa
 b += pagehero("Edu Wisata Kolam Renang", "Edu Wisata Kolam Renang Pilarmas", "Datang untuk berenang bersama keluarga, ikut les renang, atau pesan tempat untuk ulang tahun, arisan, gathering, dan kunjungan sekolah.", f'<a class="btn brass" data-wa="kolam" href="#kontak">{I["wa"]}Tanya admin kolam</a>', mascot="logo-pilarmas.webp")
 b += subnav([("Tiket", "tiket"), ("Fasilitas", "fasilitas"), ("Les renang", "les"), ("Ulang tahun", "ultah"), ("Arisan & keluarga", "arisan"), ("Komunitas & kantor", "komunitas"), ("Sekolah", "sekolah"), ("Musiman", "musiman"), ("Tanya jawab", "faq")])
 b += section("tiket", "Tiket & langganan", "Untuk keluarga yang ingin berenang kapan saja.", [
-  card("Tiket harian", "Akses kolam dewasa dan kolam anak. Buka Senin–Jumat 09.00–17.00, Sabtu–Minggu 08.00–17.00.", "Rp 15.000 hari kerja, Rp 20.000 akhir pekan", go="Tanya admin kolam", wa="kolam", img="kolam-perosotan", alt="Kolam anak Pilarmas dengan perosotan"),
+  card("Tiket harian", "Akses kolam dewasa dan kolam anak. Buka Senin–Jumat 09.00–17.00, Sabtu–Minggu 08.00–17.00.", "Rp 20.000, dewasa dan anak, setiap hari", go="Tanya admin kolam", wa="kolam", img="kolam-perosotan", alt="Kolam anak Pilarmas dengan perosotan"),
   card("Kartu langganan 10x", "Bayar 8 kali, berenang 10 kali. Berlaku 3 bulan dan bisa dipakai bergantian dalam satu keluarga.", "Harga 8 tiket", tag="Paling hemat", go="Beli kartu langganan", wa="kolam"),
   card("Sewa kolam privat", "Kolam ditutup untuk umum selama 2 sampai 3 jam, khusus keluarga atau rombongan Anda, di luar jam ramai.", "Mulai Rp 1.500.000 per sesi", go="Cek tanggal", wa="acara", img="kolam-utama", alt="Kolam utama Pilarmas dengan gazebo biru"),
 ])
