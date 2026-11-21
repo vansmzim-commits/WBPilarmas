@@ -69,7 +69,7 @@ def head(title, desc):
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc)}">
 {FONTS}
-<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="assets/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png"><meta name="theme-color" content="#1673AE"><link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 <a class="skip" href="#isi">Langsung ke isi</a>'''
