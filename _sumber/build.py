@@ -225,6 +225,26 @@ TILES = [
  ("Galon antar & langganan", "Air minum diantar, bisa jadwal tetap setiap minggu.", "Tanya harga", "Hydro", "hydro.html#layanan", "rumah"),
  ("Pelatihan perhotelan", "Siapkan karier di hotel, dalam dan luar negeri.", "Tanya program", "Global Hospitality", "global-hospitality.html#program", "dewasa karier"),
 ]
+
+# Visual tiap kartu program: foto asli bila ada, selain itu karakter di atas warna divisi
+TILE_VIS = ["f:kolam-anak", "f:kolam-perosotan", "f:kolam-utama", "c:kuya", "f:saung", "f:saung-bambu", "f:kegiatan-saung", "f:edu-trip",
+            "c:halaf", "c:monpil", "f:spelling-bee", "c:tanbo", "c:bungjin", "l:globenet", "c:bae", "l:gh"]
+TILE_TAG = {0: "Paling dicari", 1: "Favorit keluarga", 3: "Lebih hemat", 11: "Libur sekolah"}
+TILE_COLOR = {"Edu Wisata": "#1E9DB0", "HD Star": "#B68A4A", "HD Star + Edu Wisata": "#B68A4A", "Globe.Net": "#3B6FB6", "Hydro": "#2FA58A", "Global Hospitality": "#7A5C9E"}
+ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
+def tile(i, t, desc, p, d, h, f):
+    kind, key = TILE_VIS[i].split(":")
+    if kind == "f":
+        pic = f'<img src="assets/foto-{key}.webp" alt="" loading="lazy">'
+    elif kind == "c":
+        pic = f'<img class="tchar" src="assets/char-{key}.webp" alt="" loading="lazy">'
+    else:
+        pic = f'<img class="tlogo" src="assets/logo-{key}.webp" alt="" loading="lazy">'
+    tag = f'<span class="ttag">{E(TILE_TAG[i])}</span>' if i in TILE_TAG else ""
+    return (f'<a class="tile t-{kind}" data-for="{f}" href="{h}" style="--c:{TILE_COLOR.get(d, "#1E9DB0")}">'
+            f'<span class="tpic">{pic}{tag}<span class="div">{E(d)}</span></span>'
+            f'<span class="tbody"><h3>{E(t)}</h3><p>{E(desc)}</p>'
+            f'<span class="tfoot"><span class="price">{E(p)}</span><span class="more">Lihat {ARROW}</span></span></span></a>')
 CHIPS = [("semua", "Semua"), ("anak", "Untuk anak"), ("keluarga", "Keluarga"), ("sekolah", "Sekolah"), ("komunitas", "Komunitas & kantor"), ("dewasa", "Dewasa"), ("rumah", "Rumah & usaha"), ("karier", "Karier")]
 
 b = head("Pilarmas Sukabumi", "Kolam renang, les renang, paket ulang tahun, les bahasa Inggris, internet, dan air minum dari Pilarmas Sukabumi.") + topbar("index.html")
@@ -245,7 +265,7 @@ b += f'''<main id="isi">
   <div class="guide">{char("bae", "", True, "guideChar")}<p class="bubble" aria-live="polite"><b id="guideName">Bae</b><span id="bubble">Halo, aku Bae! Pilih untuk siapa programnya, nanti teman-temanku yang menunjukkan.</span></p></div>
   <div class="chips" role="group" aria-label="Saring program">{"".join(f'<button class="chip" data-f="{k}" aria-pressed="false">{E(t)}</button>' for k, t in CHIPS)}</div>
   <p class="count" id="count" aria-live="polite"></p>
-  <div class="grid">{"".join(f'<a class="tile" data-for="{f}" href="{h}"><span class="div">{E(d)}</span><h3>{E(t)}</h3><p>{E(desc)}</p><span class="price">{E(p)}</span></a>' for t, desc, p, d, h, f in TILES)}</div>
+  <div class="grid">{"".join(tile(i, *x) for i, x in enumerate(TILES))}</div>
 </div></section>
 <section class="band" style="background:var(--water-3)"><div class="wrap">
   <div class="sec-head"><h2>Lima divisi, satu keluarga Pilarmas</h2><p class="lead">Setiap divisi punya halaman sendiri berisi semua programnya.</p></div>
