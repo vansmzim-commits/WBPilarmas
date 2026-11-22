@@ -182,7 +182,8 @@ for (const p of $$(".pal")) p.addEventListener("click", () => { p.classList.remo
   }
   async function startWA() {
     if (!ctx) { ctx = new AC(); gain = ctx.createGain(); gain.gain.value = 0; gain.connect(ctx.destination); }
-    if (ctx.state === "suspended") await ctx.resume();
+    if (ctx.state !== "running") await Promise.race([ctx.resume(), new Promise((r) => setTimeout(r, 400))]);
+    if (ctx.state !== "running") throw new Error("diblokir");
     if (!buf) {
       loading = loading || fetch(src).then((r) => r.arrayBuffer()).then((a) => new Promise((ok, no) => ctx.decodeAudioData(a, ok, no)));
       buf = await loading;
@@ -217,24 +218,28 @@ for (const p of $$(".pal")) p.addEventListener("click", () => { p.classList.remo
   btn.addEventListener("click", () => { if (playing) { stop(); save("off"); } else { play(); save("on"); } });
 
   // Musik menyala otomatis kecuali pengunjung pernah mematikannya.
-  // Browser melarang suara sebelum ada interaksi, jadi dicoba langsung dulu; bila ditolak, mulai pada sentuhan/klik/tombol pertama.
+  // Browser melarang suara sebelum ada interaksi. Dicoba langsung dulu; bila ditolak, dicoba lagi pada
+  // setiap sentuhan/klik/tombol sampai berhasil (di HP, sentuhan untuk menggulir belum dihitung browser).
   if (saved() !== "off") {
-    const ev = ["pointerdown", "keydown", "touchend", "click"];
-    const off = () => ev.forEach((t) => removeEventListener(t, go, true));
-    const go = (e) => { if (e && btn.contains(e.target)) { off(); return; } off(); if (!playing) play(); };
+    const ev = ["pointerup", "touchend", "click", "keydown", "mousedown"];
+    let busy = false, done = false;
+    const off = () => { done = true; ev.forEach((t) => removeEventListener(t, go, true)); };
+    const go = (e) => {
+      if (done || busy || playing) return;
+      if (e && btn.contains(e.target)) return;
+      busy = true;
+      play().then((ok) => { busy = false; if (ok) off(); });
+    };
     ev.forEach((t) => addEventListener(t, go, { capture: true, passive: true }));
-    (async () => {
+    if (AC) {
       try {
-        if (AC) {
-          ctx = new AC(); gain = ctx.createGain(); gain.gain.value = 0; gain.connect(ctx.destination);
-          await Promise.race([ctx.resume(), new Promise((r) => setTimeout(r, 300))]);
-          if (ctx.state === "running") { off(); play(); }
-        } else {
-          el = Object.assign(new Audio(src), { loop: true, volume: VOL });
-          await el.play(); off(); playing = true; ui(true);
-        }
+        ctx = new AC(); gain = ctx.createGain(); gain.gain.value = 0; gain.connect(ctx.destination);
+        if (ctx.state === "running") go();
       } catch (e) {}
-    })();
+    } else {
+      el = Object.assign(new Audio(src), { loop: true, volume: VOL });
+      el.play().then(() => { off(); playing = true; ui(true); }).catch(() => {});
+    }
   }
   document.addEventListener("visibilitychange", () => { if (!ctx) return; if (document.hidden) ctx.suspend(); else if (playing) ctx.resume(); });
 })();
