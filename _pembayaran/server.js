@@ -215,7 +215,7 @@ async function refreshStatus(o) {
     if (st === 'SUCCESS') markPaid(o.doku_invoice || o.invoice, r?.order?.amount, r?.channel?.id || r?.service?.id, 'check-status');
     else if (st === 'EXPIRED') db.prepare("UPDATE orders SET status='EXPIRED', updated_at=? WHERE invoice=? AND status='PENDING'").run(now(), o.invoice);
   } catch (e) {
-    if (e.status !== 404) console.error('check status', o.invoice, e.message);
+    if (e.dokuStatus !== 404) console.error('check status', o.invoice, e.message);
   }
   const fresh = getOrder.get(o.invoice);
   if (fresh.status === 'PENDING' && fresh.expired_at && new Date(fresh.expired_at) < new Date()) {
@@ -359,8 +359,10 @@ async function handle(req, res) {
 
 const server = http.createServer((req, res) => {
   handle(req, res).catch((e) => {
-    if (!e.status) console.error(e);
-    if (!res.headersSent) send(res, e.status || 500, { error: e.status ? e.message : 'Terjadi kesalahan, coba lagi atau hubungi admin' });
+    if (e.dokuStatus || !e.status) console.error(e.message || e);
+    if (res.headersSent) return;
+    if (e.dokuStatus || /DOKU/.test(e.message)) return send(res, 502, { error: 'Pembayaran online sedang tidak tersedia. Silakan coba lagi nanti atau chat admin.' });
+    send(res, e.status || 500, { error: e.status ? e.message : 'Terjadi kesalahan, coba lagi atau hubungi admin' });
   });
 });
 

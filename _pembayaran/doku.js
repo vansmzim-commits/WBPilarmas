@@ -35,7 +35,7 @@ async function call(method, target, payload) {
   let json; try { json = JSON.parse(text); } catch { json = { raw: text }; }
   if (!res.ok) {
     const err = new Error(`DOKU ${res.status}: ${text.slice(0, 300)}`);
-    err.status = res.status; err.body = json; throw err;
+    err.dokuStatus = res.status; err.body = json; throw err;
   }
   return json;
 }
