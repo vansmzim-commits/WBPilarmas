@@ -13,11 +13,15 @@ bash <(curl -fsSL https://raw.githubusercontent.com/vansmzim-commits/WBPilarmas/
 ```
 Syarat sekali saja: record DNS **A `bayar` → 202.134.242.165**.
 
-## Halaman
-- `/bayar/`: tiket harian, kartu 10x, DP 50% ulang tahun
-- `/bayar/?inv=PM-...`: bayar tagihan dari admin
-- `/bayar/admin.html`: buat tagihan nominal bebas + daftar transaksi
-- `/bayar/tombol-bayar.js`: tombol hijau di website (dipasang lewat `_sumber/build.py`)
+## Cara pelanggan memesan
+Tidak ada halaman terpisah. `tombol-bayar.js` (dimuat di semua halaman lewat `_sumber/build.py`) menambahkan tombol
+**Pesan & bayar** di setiap kartu menu yang punya harga. Form pesanan dan jendela pembayaran DOKU (Checkout JS) tampil
+di atas halaman yang sama. Setelah bayar, pelanggan kembali ke halaman yang sama (`#pm=PM-...`) dan melihat status.
+
+- Bayar penuh: tiket harian, kartu 10x, kelas coba, pendaftaran lomba
+- DP 50%: ulang tahun (juga dari kalkulator), arisan, gathering, kopdar, majelis taklim, edu trip, outing, sewa kolam, syukuran, perpisahan TK, camp, halal bihalal
+- Tagihan nominal bebas (les bulanan, Globe.Net, Hydro, dll.): admin membuat di `/bayar/admin.html`, link-nya `https://pilarmas.online/#pm=PM-...`
+- Kartu tanpa harga ("Tanya harga") tetap lewat WhatsApp
 
 ## Harga
 Ada di `catalog.js`. Harga selalu dihitung di server. Ubah, commit, lalu jalankan ulang perintah install.

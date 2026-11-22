@@ -1,58 +1,8 @@
-<!doctype html>
-<html lang="id">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Status pembayaran · Pilarmas</title>
-<meta name="robots" content="noindex">
-<link rel="stylesheet" href="/bayar/style.css">
-</head>
-<body>
-<header><a href="https://pilarmas.online/">Pilarmas</a><a class="wa" href="https://wa.me/6285797810150" target="_blank" rel="noopener">Chat admin</a></header>
-<main>
-  <h1>Status pembayaran</h1>
-  <div class="card">
-    <div id="info">Memeriksa pembayaran…</div>
-    <a class="btn hide" id="lanjut">Lanjutkan pembayaran</a>
-    <button class="btn ghost hide" id="ulang">Buat nomor pembayaran baru</button>
-    <a class="btn ghost" href="https://pilarmas.online/">Kembali ke beranda</a>
-    <div class="err" id="err"></div>
-  </div>
-</main>
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="robots" content="noindex">
+<title>Pilarmas</title><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>
+<p style="font-family:sans-serif;padding:20px">Mengalihkan ke pilarmas.online…</p>
 <script>
-const rp = n => 'Rp' + Number(n).toLocaleString('id-ID');
-const esc = s => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
-const inv = new URLSearchParams(location.search).get('inv') || (()=>{try{return localStorage.getItem('pm_last_inv')}catch{}})();
-const $ = id => document.getElementById(id);
-const LABEL = { PAID: 'Lunas', PENDING: 'Menunggu pembayaran', OPEN: 'Belum dibayar', EXPIRED: 'Kedaluwarsa', REVIEW: 'Sedang dicek admin' };
-let tries = 0;
-
-async function cek() {
-  if (!inv) { $('info').textContent = 'Nomor tagihan tidak ditemukan.'; return; }
-  try {
-    const r = await fetch('/api/pay/order/' + encodeURIComponent(inv));
-    const o = await r.json();
-    if (!r.ok) throw new Error(o.error);
-    $('info').innerHTML = `<span class="badge b-${o.status}">${LABEL[o.status] || o.status}</span>
-      <h2 style="margin:12px 0 4px">${rp(o.amount)}</h2><div>${esc(o.judul)}</div>
-      ${o.catatan ? `<div class="note">${esc(o.catatan)}</div>` : ''}
-      <div class="note">No. pesanan <b>${esc(o.invoice)}</b>${o.channel ? ' · ' + esc(o.channel.replace(/_/g,' ')) : ''}</div>
-      ${o.status === 'PAID' ? '<p><b>Terima kasih!</b> Pembayaran sudah kami terima. Simpan nomor pesanan ini dan tunjukkan ke kasir. Admin juga akan menghubungi lewat WhatsApp.</p>' : ''}
-      ${o.status === 'PENDING' ? '<p class="note">Halaman ini memeriksa otomatis. Bila sudah transfer, tunggu 1–2 menit.</p>' : ''}`;
-    $('lanjut').classList.toggle('hide', !(o.status === 'PENDING' && o.payment_url));
-    if (o.payment_url) $('lanjut').href = o.payment_url;
-    $('ulang').classList.toggle('hide', !['EXPIRED', 'OPEN'].includes(o.status));
-    if (o.status === 'PENDING' && tries++ < 40) setTimeout(cek, tries < 6 ? 10000 : 30000);
-  } catch (e) { $('err').textContent = e.message || 'Gagal memeriksa status'; }
-}
-$('ulang').onclick = async () => {
-  $('ulang').disabled = true;
-  try {
-    const r = await fetch(`/api/pay/order/${encodeURIComponent(inv)}/bayar`, { method: 'POST' });
-    const j = await r.json(); if (!r.ok) throw new Error(j.error); location.href = j.payment_url;
-  } catch (e) { $('err').textContent = e.message; $('ulang').disabled = false; }
-};
-cek();
-</script>
-</body>
-</html>
+// Pemesanan & pembayaran ada langsung di halaman menu pilarmas.online.
+var q = new URLSearchParams(location.search), inv = q.get('inv');
+location.replace(inv ? 'https://pilarmas.online/#pm=' + encodeURIComponent(inv) : 'https://pilarmas.online/edu-wisata.html#tiket');
+</script></body></html>

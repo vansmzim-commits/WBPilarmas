@@ -7,11 +7,14 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const { DatabaseSync } = require('node:sqlite');
 const doku = require('./doku');
-const { hitung, ULTAH_PAKET, ULTAH_TAMBAHAN, TIKET_HARIAN, KARTU_10X } = require('./catalog');
+const { hitung, PRODUK, ULTAH_PAKET, ULTAH_TAMBAHAN } = require('./catalog');
 
 const PORT = Number(process.env.PORT || 8088);
 const PUBLIC_BASE = (process.env.PUBLIC_BASE || 'https://bayar.pilarmas.online').replace(/\/$/, '');
 const NOTIFY_PATH = '/api/pay/doku/notify';
+const SITE_BASE = (process.env.SITE_BASE || 'https://pilarmas.online').replace(/\/$/, '');
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://pilarmas.online,https://www.pilarmas.online')
+  .split(',').map((x) => x.trim().replace(/\/$/, '')).filter(Boolean).concat(PUBLIC_BASE);
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '';
 const HOOK_URL = process.env.HOOK_URL || '';
 const HOOK_SECRET = process.env.HOOK_SECRET || '';
@@ -160,14 +163,23 @@ function markPaid(dokuInvoice, amount, channel, source) {
   return { ok: true };
 }
 
+// Halaman tujuan setelah bayar: kembali ke halaman asal di website (bukan link baru)
+function safeReturn(u) {
+  try {
+    const x = new URL(String(u || ''));
+    if (ALLOWED_ORIGINS.includes(x.origin)) return x.origin + x.pathname;
+  } catch {}
+  return SITE_BASE + '/';
+}
+
 // ---------- buat checkout DOKU untuk order ----------
 // Nomor invoice Pilarmas tetap. Bila link lama kedaluwarsa, DOKU diberi nomor turunan
 // (PM-...-R2) karena DOKU menolak invoice_number yang sama dua kali.
-async function startCheckout(o) {
+async function startCheckout(o, returnUrl) {
   if (o.status === 'PENDING' && o.payment_url && o.expired_at && new Date(o.expired_at) > new Date(Date.now() + 5 * 60e3)) {
     return o.payment_url;
   }
-  const due = o.produk.startsWith('tiket') || o.produk === 'kartu-10x' ? 120 : 1440;
+  const due = PRODUK[o.produk]?.mode === 'lunas' ? 180 : 1440;
   const data = JSON.parse(o.data_json || '{}');
   const items = data._items || [{ name: o.judul.slice(0, 255), price: o.amount, quantity: 1 }];
   const attempt = (o.attempts || 0) + 1;
@@ -178,7 +190,7 @@ async function startCheckout(o) {
     amount: o.amount,
     items,
     customer: { name: o.cust_name, phone: o.cust_phone, email: o.cust_email },
-    callbackUrl: `${PUBLIC_BASE}/bayar/selesai.html?inv=${encodeURIComponent(o.invoice)}`,
+    callbackUrl: `${safeReturn(returnUrl)}#pm=${encodeURIComponent(o.invoice)}`,
     notifyUrl: PUBLIC_BASE + NOTIFY_PATH,
     dueMinutes: due,
   });
@@ -229,17 +241,28 @@ async function handle(req, res) {
   const p = url.pathname;
   const m = req.method;
 
+  // CORS: widget di pilarmas.online memanggil API ini langsung
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.includes(origin) && p.startsWith('/api/pay/') && !p.startsWith('/api/pay/admin/') && p !== NOTIFY_PATH) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Max-Age', '86400');
+  }
+  if (m === 'OPTIONS') { res.writeHead(204); return res.end(); }
+
   if (m === 'GET' && p === '/') { res.writeHead(302, { Location: '/bayar/' }); return res.end(); }
   if (m === 'GET' && (p === '/bayar' || p.startsWith('/bayar/'))) return serveStatic(req, res, p);
   if (p === '/api/pay/health') return send(res, 200, { ok: true, env: process.env.DOKU_ENV || 'sandbox', methods: doku.PAYMENT_METHODS.length });
 
   if (m === 'GET' && p === '/api/pay/katalog') {
-    return send(res, 200, { tiket_harian: TIKET_HARIAN, kartu_10x: KARTU_10X, ultah_paket: ULTAH_PAKET, ultah_tambahan: ULTAH_TAMBAHAN });
+    return send(res, 200, { env: process.env.DOKU_ENV || 'sandbox', produk: PRODUK, ultah_paket: ULTAH_PAKET, ultah_tambahan: ULTAH_TAMBAHAN });
   }
 
   // Pelanggan memesan produk berharga tetap
   if (m === 'POST' && p === '/api/pay/checkout') {
-    if (!rateLimit(req)) return send(res, 429, { error: 'Terlalu banyak percobaan, coba lagi nanti' });
+    if (!rateLimit(req, Number(process.env.RATE_MAX || 15))) return send(res, 429, { error: 'Terlalu banyak percobaan, coba lagi nanti' });
     const b = await readJson(req);
     const customer = cleanCustomer(b.customer);
     let calc;
@@ -251,7 +274,7 @@ async function handle(req, res) {
       VALUES (?,?,?,?,?,?,?,?,?,?,?,'OPEN','web',?,?)`)
       .run(invoice, b.produk, calc.divisi, calc.judul, calc.catatan || null, calc.amount, calc.total || calc.amount,
         JSON.stringify(data), customer.name, customer.phone, customer.email || null, now(), now());
-    const payment_url = await startCheckout(getOrder.get(invoice));
+    const payment_url = await startCheckout(getOrder.get(invoice), b.return_url);
     return send(res, 200, { invoice, amount: calc.amount, total: calc.total || calc.amount, payment_url });
   }
 
@@ -265,12 +288,13 @@ async function handle(req, res) {
 
   // Pelanggan membayar tagihan yang dibuat admin
   if (m === 'POST' && (mm = p.match(/^\/api\/pay\/order\/(PM-\d{8}-[0-9A-F]{6})\/bayar$/))) {
-    if (!rateLimit(req)) return send(res, 429, { error: 'Terlalu banyak percobaan' });
+    if (!rateLimit(req, Number(process.env.RATE_MAX || 15))) return send(res, 429, { error: 'Terlalu banyak percobaan' });
+    const b = await readJson(req).catch(() => ({}));
     const o = getOrder.get(mm[1]);
     if (!o) return send(res, 404, { error: 'Tagihan tidak ditemukan' });
     if (o.status === 'PAID') return send(res, 409, { error: 'Tagihan sudah lunas' });
     if (o.status === 'REVIEW') return send(res, 409, { error: 'Tagihan sedang dicek admin' });
-    const payment_url = await startCheckout(o);
+    const payment_url = await startCheckout(o, b.return_url);
     return send(res, 200, { invoice: o.invoice, payment_url });
   }
 
@@ -311,7 +335,7 @@ async function handle(req, res) {
         VALUES (?,?,?,?,?,?,?,?,?,?,?,'OPEN','admin',?,?)`)
         .run(invoice, 'tagihan', divisi, judul, String(b.catatan || '').slice(0, 500) || null, amount, amount,
           '{}', customer.name, customer.phone, customer.email || null, now(), now());
-      return send(res, 200, { invoice, link: `${PUBLIC_BASE}/bayar/?inv=${invoice}` });
+      return send(res, 200, { invoice, link: `${SITE_BASE}/#pm=${invoice}` });
     }
 
     if (m === 'GET' && p === '/api/pay/admin/orders') {
