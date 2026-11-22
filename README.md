@@ -31,6 +31,10 @@ Kode layanan pembayaran ada di `_pembayaran/` (tidak ikut tayang). Lihat `_pemba
 
 ## Memasang di pilarmas.online
 
+**Yang berjalan sekarang (Nov 2026):** website dilayani Caddy di VPS 202.134.242.165, folder `/var/www/pilarmas.online`. Setelah `build.py`, salin file `.html` dan `assets/` ke folder itu. Layanan pembayaran ada di `bayar.pilarmas.online` (lihat `_pembayaran/README.md`).
+
+Alternatif:
+
 **GitHub Pages:** Settings → Pages → Source: branch `main`, folder `/ (root)`. Domain sudah diisi lewat file `CNAME`. Di pengelola DNS domain, arahkan `pilarmas.online` (record A) ke 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153, dan `www` (CNAME) ke `<akun>.github.io`.
 
 **VPS / hosting sendiri:** salin seluruh isi folder (kecuali `_sumber/`) ke document root web server. Tidak perlu PHP atau database.
