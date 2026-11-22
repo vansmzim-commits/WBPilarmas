@@ -25,6 +25,10 @@ Nomor WhatsApp admin tiap divisi ada di `assets/app.js` (objek `WA`).
 - Les renang: https://daftarlesrenang.pilarmas.online/
 - Global Hospitality: https://daftarsiswaghs.pilarmas.online/
 
+## Pembayaran online (DOKU)
+
+Kode layanan pembayaran ada di `_pembayaran/` (tidak ikut tayang). Lihat `_pembayaran/README.md`.
+
 ## Memasang di pilarmas.online
 
 **GitHub Pages:** Settings → Pages → Source: branch `main`, folder `/ (root)`. Domain sudah diisi lewat file `CNAME`. Di pengelola DNS domain, arahkan `pilarmas.online` (record A) ke 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153, dan `www` (CNAME) ke `<akun>.github.io`.

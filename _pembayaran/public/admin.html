@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin pembayaran · Pilarmas</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="/bayar/style.css">
+<style>main{max-width:980px}</style>
+</head>
+<body>
+<header><a href="https://pilarmas.online/">Pilarmas · Admin Bayar</a></header>
+<main>
+  <div class="card" id="login">
+    <label>Token admin</label><input id="tok" type="password" autocomplete="current-password">
+    <button class="btn" id="masuk">Masuk</button><div class="err" id="lerr"></div>
+  </div>
+
+  <div id="app" class="hide">
+    <div class="card">
+      <h2 style="margin-top:0">Buat tagihan (nominal bebas)</h2>
+      <p class="note">Untuk les renang, arisan, komunitas, kunjungan sekolah, Globe.Net, Hydro, dll. Pelanggan menerima link, lalu mendapat VA sendiri.</p>
+      <div class="row">
+        <div><label>Divisi</label><select id="divisi"><option value="edu">Edu Wisata</option><option value="hdstar">HD Star</option><option value="globe">Globe.Net</option><option value="hydro">Hydro</option><option value="hospitality">Global Hospitality</option><option value="pusat">Kantor pusat</option></select></div>
+        <div><label>Nominal (Rp)</label><input id="amount" type="number" min="10000" step="1000"></div>
+      </div>
+      <label>Keterangan</label><input id="judul" placeholder="Les renang Desember - Aisyah">
+      <div class="row">
+        <div><label>Nama pelanggan</label><input id="nama"></div>
+        <div><label>No. WhatsApp</label><input id="hp" placeholder="08xxxxxxxxxx"></div>
+      </div>
+      <button class="btn" id="buat">Buat link pembayaran</button>
+      <div class="err" id="err"></div>
+      <div id="hasil" class="sum hide"></div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+        <h2 style="margin:0">Daftar transaksi</h2>
+        <select id="filter" style="width:auto"><option value="">Semua</option><option>PAID</option><option>PENDING</option><option>OPEN</option><option>EXPIRED</option><option>REVIEW</option></select>
+      </div>
+      <div style="overflow:auto"><table id="tbl"></table></div>
+    </div>
+  </div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const rp = n => 'Rp' + Number(n).toLocaleString('id-ID');
+const esc = s => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+let TOKEN = sessionStorage.getItem('pm_admin') || '';
+const api = async (p, o = {}) => {
+  const r = await fetch(p, { ...o, headers: { 'Content-Type': 'application/json', 'X-Admin-Token': TOKEN, ...(o.headers || {}) } });
+  const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.error || 'Gagal'); return j;
+};
+async function muat() {
+  const st = $('filter').value;
+  const rows = await api('/api/pay/admin/orders' + (st ? '?status=' + st : ''));
+  $('tbl').innerHTML = '<tr><th>Waktu</th><th>Invoice</th><th>Pelanggan</th><th>Keterangan</th><th>Nominal</th><th>Status</th><th>Channel</th></tr>' +
+    rows.map(o => `<tr><td>${new Date(o.created_at).toLocaleString('id-ID',{dateStyle:'short',timeStyle:'short'})}</td><td>${esc(o.invoice)}</td>
+      <td>${esc(o.cust_name)}<br><small>${esc(o.cust_phone)}</small></td><td>${esc(o.judul)}</td><td>${rp(o.amount)}</td>
+      <td><span class="badge b-${o.status}">${o.status}</span></td><td><small>${esc(o.channel || '')}</small></td></tr>`).join('');
+}
+async function masuk() {
+  try { await muat(); sessionStorage.setItem('pm_admin', TOKEN); $('login').classList.add('hide'); $('app').classList.remove('hide'); }
+  catch (e) { $('lerr').textContent = e.message; }
+}
+$('masuk').onclick = () => { TOKEN = $('tok').value; masuk(); };
+$('filter').onchange = muat;
+$('buat').onclick = async () => {
+  $('err').textContent = ''; $('buat').disabled = true;
+  try {
+    const r = await api('/api/pay/admin/tagihan', { method: 'POST', body: JSON.stringify({
+      divisi: $('divisi').value, amount: +$('amount').value, judul: $('judul').value,
+      customer: { name: $('nama').value, phone: $('hp').value } }) });
+    const hp = $('hp').value.replace(/\D/g, '').replace(/^0/, '62');
+    const pesan = `Halo ${$('nama').value}, berikut tagihan Pilarmas:\n${$('judul').value}\nNominal: ${rp(+$('amount').value)}\n\nBayar lewat link ini (VA khusus untuk Anda, terverifikasi otomatis):\n${r.link}`;
+    $('hasil').innerHTML = `<b>${esc(r.invoice)}</b><br><a href="${esc(r.link)}" target="_blank">${esc(r.link)}</a><br>
+      <a class="btn" target="_blank" href="https://wa.me/${hp}?text=${encodeURIComponent(pesan)}">Kirim lewat WhatsApp</a>`;
+    $('hasil').classList.remove('hide'); muat();
+  } catch (e) { $('err').textContent = e.message; }
+  $('buat').disabled = false;
+};
+if (TOKEN) masuk();
+</script>
+</body>
+</html>

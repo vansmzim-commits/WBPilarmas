@@ -135,6 +135,7 @@ def foot():
 {LIGHTBOX}
 {MUSIC_BTN}
 <script src="assets/app.js?v={VER_JS}"></script>
+<script src="https://bayar.pilarmas.online/bayar/tombol-bayar.js" defer></script>
 </body>
 </html>'''
 
